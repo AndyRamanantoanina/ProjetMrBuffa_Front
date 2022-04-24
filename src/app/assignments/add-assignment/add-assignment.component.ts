@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../assignment.model';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-add-assignment',
@@ -12,10 +13,21 @@ export class AddAssignmentComponent implements OnInit {
   // Champ de formulaire
   nomAssignment!: string;
   dateDeRendu!: Date;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  isEditable = false;
 
-  constructor(private assignmentsService:AssignmentsService, private router:Router) {}
 
-  ngOnInit(): void {}
+  constructor(private assignmentsService:AssignmentsService, private router:Router,private _formBuilder: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required],
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required],
+    });
+  }
 
   onSubmit() {
     if((!this.nomAssignment) || (!this.dateDeRendu)) return;
@@ -38,4 +50,5 @@ export class AddAssignmentComponent implements OnInit {
       this.router.navigate(["/home"]);
     })
   }
+  
 }

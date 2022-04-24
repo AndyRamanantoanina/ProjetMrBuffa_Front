@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
 
   seConnecter() {
     const loginForm = {
-      'email': this.login,
-      'password': this.motDePasse
+      'pseudo': this.login,
+      'mdp': this.motDePasse
     }
     console.log(loginForm);
 

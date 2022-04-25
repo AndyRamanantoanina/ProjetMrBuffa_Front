@@ -20,13 +20,13 @@ export class AuthService {
     localStorage.setItem('access_token', token);
   }
 
-  setUtilisateur(utilisateur:any) {
-    localStorage.setItem('utilisateur', JSON.stringify(utilisateur));
+  setUtilisateurAdmin(admin:boolean) {
+    localStorage.setItem('isAdmin', JSON.stringify(admin));
   }
 
   isAdmin() {
-    let isUserAdmin = JSON.parse(localStorage.getItem('utilisateur') || '{}');
-    return isUserAdmin.isAdmin;
+    let isUserAdmin = JSON.parse(localStorage.getItem('isAdmin') || '{}');
+    return isUserAdmin;
   }
 
   getToken():any {

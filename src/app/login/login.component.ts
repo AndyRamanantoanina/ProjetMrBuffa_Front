@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
         // @ts-ignore
         this.auth.setToken(response.token);
         // @ts-ignore
-        this.auth.setUtilisateur(response.user);
+        this.auth.setUtilisateurAdmin(response.user.isAdmin);
+        console.log(localStorage.getItem("isAdmin"));
+        console.log(response);
         this.router.navigate(['./home']);
       },
       error: () => {
@@ -50,7 +52,7 @@ export class LoginComponent implements OnInit {
           duration : 2000,
           verticalPosition: 'top',
           panelClass: ['mat-toolbar', 'mat-primary']
-        });
+        })
       }
     }) 
   }

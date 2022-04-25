@@ -26,13 +26,13 @@ export class AssignmentsService {
 
   protected setAuthorizationTokenValue() : void {
     this.authorizationToken = 'Bearer ' + this.auth.getToken();
-
   }
 
   protected getOptions(options: any = {}) : any {
     this.setAuthorizationTokenValue();
 
     let requestHeaders: HttpHeaders;
+    
     var allowHeaders = '*';
     var contentType = 'application/json';
     if(options.headers && (options.headers instanceof HttpHeaders)) {

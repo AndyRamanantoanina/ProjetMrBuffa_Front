@@ -21,6 +21,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 import { AssignmentsComponent } from './assignments/assignments.component';
 import { RenduDirective } from './shared/rendu.directive';
@@ -37,6 +39,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { EditAssignmentComponent } from './assignments/edit-assignment/edit-assignment.component';
 import { AuthGuard } from './shared/auth.guard';
 import { LoginComponent } from './login/login.component';
+import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
 
 const routes:Routes = [
   {
@@ -76,18 +79,19 @@ const routes:Routes = [
     AddAssignmentComponent,
     EditAssignmentComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    AddNoteDialogComponent
 
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule,CommonModule,
+    BrowserModule, FormsModule, ReactiveFormsModule,CommonModule, MatDialogModule,
     BrowserAnimationsModule, MatButtonModule, MatIconModule, MatDividerModule,
     MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule, MatSidenavModule,
     MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule, MatTableModule, MatToolbarModule,
     RouterModule.forRoot(routes), HttpClientModule, ScrollingModule, DragDropModule, MatStepperModule, 
   ],
   exports: [
-    BrowserModule, FormsModule, ReactiveFormsModule,CommonModule,
+    BrowserModule, FormsModule, ReactiveFormsModule,CommonModule,MatDialogModule,
     BrowserAnimationsModule, MatButtonModule, MatIconModule, MatDividerModule,
     MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule, MatSidenavModule,
     MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule, MatTableModule, MatToolbarModule,

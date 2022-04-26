@@ -1,9 +1,10 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild, Inject} from '@angular/core';
 import { filter, map, pairwise, tap, throttleTime } from 'rxjs';
 import { AssignmentsService } from '../shared/assignments.service';
 import { Assignment } from './assignment.model';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {MatDialog,MatDialogRef} from '@angular/material/dialog';
 @Component({
   selector: 'app-assignments',
   templateUrl: './assignments.component.html',
@@ -23,9 +24,10 @@ export class AssignmentsComponent implements OnInit, AfterViewInit {
   prevPage= 1;
   nextPage= 2;
 
-  constructor(private assignmentsService:AssignmentsService, private ngZone: NgZone) {}
+  constructor(private assignmentsService:AssignmentsService, private ngZone: NgZone, public dialog: MatDialog) {}
 
   @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
+  
 
   ngAfterViewInit():void{
     this.scroller.elementScrolled().pipe(
@@ -132,9 +134,9 @@ export class AssignmentsComponent implements OnInit, AfterViewInit {
     this.getAssignments();
   }
 
-  todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
+  rendu = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
 
-  done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
+  nonrendu = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {

@@ -80,7 +80,6 @@ const routes:Routes = [
     EditAssignmentComponent,
     LoginComponent,
     HeaderComponent,
-    AddNoteDialogComponent
 
   ],
   imports: [

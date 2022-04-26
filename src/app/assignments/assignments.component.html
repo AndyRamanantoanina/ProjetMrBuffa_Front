@@ -1,5 +1,4 @@
 
- 
 
   <!--
      <a routerLink="/add" class="ajouterBtn">
@@ -57,33 +56,61 @@
 
 <div>
   <main class="container">
-    <cdk-virtual-scroll-viewport itemSize="150" class="example-viewport" #scroller>
-      <div cdkDropListGroup>
-        <div class="example-container">
-          <h2>Non rendu</h2>
-      
-          <div
-            cdkDropList
-            [cdkDropListData]="todo"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
-          </div>
-        </div>
-      
-        <div class="example-container">
-          <h2>Rendu</h2>
-      
-          <div
-            cdkDropList
-            [cdkDropListData]="done"
-            class="example-list"
-            (cdkDropListDropped)="drop($event)">
-            <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
+    <a routerLink="/add" class="ajouterBtn">
+      <button mat-flat-button color="accent">
+        Ajouter Assignment
+      </button>
+    </a>
+  
+    <h2>Liste des devoirs de *Matiere* :</h2>
+    <div cdkDropListGroup>
+      <div class="example-container">
+        <h5>Non rendu</h5>
+    
+        <div
+          cdkDropList
+          [cdkDropListData]="nonrendu"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of nonrendu" cdkDrag>
+            <mat-card class="example-card">
+              <mat-card-title-group>
+                <mat-card-title>Shiba Inu</mat-card-title>
+                <mat-card-subtitle>Small</mat-card-subtitle>
+                <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+              </mat-card-title-group>
+              <mat-card-content>
+                Test
+              </mat-card-content>
+            </mat-card>
           </div>
         </div>
       </div>
-    </cdk-virtual-scroll-viewport>
+    
+      <div class="example-container">
+        <h5>Rendu</h5>
+    
+        <div
+          cdkDropList
+          [cdkDropListData]="rendu"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="example-box" *ngFor="let item of rendu" cdkDrag>
+            <mat-card class="example-card">
+              <mat-card-title-group>
+                <mat-card-title>Shiba Inu</mat-card-title>
+                <mat-card-subtitle>Small</mat-card-subtitle>
+                <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
+              </mat-card-title-group>
+              <mat-card-content>
+                Test222
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>Déplacez pour rendre un devoir.</p>
   </main>
 </div>
 

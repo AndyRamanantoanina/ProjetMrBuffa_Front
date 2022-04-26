@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatStepperModule} from '@angular/material/stepper';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AssignmentsComponent } from './assignments/assignments.component';
 import { RenduDirective } from './shared/rendu.directive';
@@ -25,6 +28,7 @@ import { NonRenduDirective } from './shared/non-rendu.directive';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { AssignmentDetailComponent } from './assignments/assignment-detail/assignment-detail.component';
 import { AddAssignmentComponent } from './assignments/add-assignment/add-assignment.component';
+import { HeaderComponent } from './navigation/header/header.component';
 
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -41,7 +45,7 @@ const routes:Routes = [
   },
   {
     path: '',
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
     children : [
       {
         path:"home",
@@ -71,14 +75,23 @@ const routes:Routes = [
     AssignmentDetailComponent,
     AddAssignmentComponent,
     EditAssignmentComponent,
-    LoginComponent
+    LoginComponent,
+    HeaderComponent
+
   ],
   imports: [
-    BrowserModule, FormsModule, ReactiveFormsModule,
+    BrowserModule, FormsModule, ReactiveFormsModule,CommonModule,
     BrowserAnimationsModule, MatButtonModule, MatIconModule, MatDividerModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule,
-    MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule, MatTableModule,
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule, MatSidenavModule,
+    MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule, MatTableModule, MatToolbarModule,
     RouterModule.forRoot(routes), HttpClientModule, ScrollingModule, DragDropModule, MatStepperModule, 
+  ],
+  exports: [
+    BrowserModule, FormsModule, ReactiveFormsModule,CommonModule,
+    BrowserAnimationsModule, MatButtonModule, MatIconModule, MatDividerModule,
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatSnackBarModule, MatSidenavModule,
+    MatListModule, MatCardModule, MatCheckboxModule, MatSlideToggleModule, MatTableModule, MatToolbarModule,
+    HttpClientModule, ScrollingModule, DragDropModule, MatStepperModule, 
   ],
   providers: [],
   bootstrap: [AppComponent]

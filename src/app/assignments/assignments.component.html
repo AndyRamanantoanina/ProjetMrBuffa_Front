@@ -1,5 +1,8 @@
-<main class="container">
-  <a routerLink="/add" class="ajouterBtn">
+
+ 
+
+  <!--
+     <a routerLink="/add" class="ajouterBtn">
     <button mat-flat-button color="accent">
       Ajouter Assignment
     </button>
@@ -25,8 +28,6 @@
     &nbsp;
     <button mat-flat-button color="primary" (click)="dernierePage()" [disabled]="!hasNextPage">Dernière page</button>
   </div>
-
-  <!--
   <table mat-table [dataSource]="assignments" class="mat-elevation-z8">
 
     <ng-container matColumnDef="id">
@@ -53,47 +54,36 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 -->
-<cdk-virtual-scroll-viewport itemSize="150" class="example-viewport" #scroller>
-  <mat-list *cdkVirtualFor="let assignment of assignments" class="example-item">
-    <nav>
-      <a href="/assignment/{{assignment.id}}">
-        <h3 mat-subheader>{{assignment.dateDeRendu | date:"dd/MM/yy"}}</h3>
-        <mat-list-item>
-          <p *ngIf="assignment.rendu; else nonsoumis" appRendu>
-            Devoir intitulé {{assignment.nom}}.
-          </p>
-          <ng-template #nonsoumis>
-            <p appNonRendu>Le devoir {{assignment.nom}} n'a pas encore été rendu.</p>
-          </ng-template>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-      </a>
-    </nav>
-  </mat-list>
-</cdk-virtual-scroll-viewport>
-<div cdkDropListGroup>
-  <div class="example-container">
-    <h2>To do</h2>
 
-    <div
-      cdkDropList
-      [cdkDropListData]="todo"
-      class="example-list"
-      (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
-    </div>
-  </div>
-
-  <div class="example-container">
-    <h2>Done</h2>
-
-    <div
-      cdkDropList
-      [cdkDropListData]="done"
-      class="example-list"
-      (cdkDropListDropped)="drop($event)">
-      <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
-    </div>
-  </div>
+<div>
+  <main class="container">
+    <cdk-virtual-scroll-viewport itemSize="150" class="example-viewport" #scroller>
+      <div cdkDropListGroup>
+        <div class="example-container">
+          <h2>To do</h2>
+      
+          <div
+            cdkDropList
+            [cdkDropListData]="todo"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+          </div>
+        </div>
+      
+        <div class="example-container">
+          <h2>Done</h2>
+      
+          <div
+            cdkDropList
+            [cdkDropListData]="done"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="example-box" *ngFor="let item of done" cdkDrag>{{item}}</div>
+          </div>
+        </div>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </main>
 </div>
-</main>
+

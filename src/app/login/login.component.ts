@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
 
   login!: string;
   motDePasse!: string;
+  hide = true;
 
 
   constructor(

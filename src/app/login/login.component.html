@@ -1,13 +1,25 @@
-<form ngForm #loginForm (submit)="onSubmit(); loginForm.reset()" class="form">
-  <mat-form-field>
-    <input matInput placeholder="Login" [(ngModel)]="login" name="login" required>
-  </mat-form-field>
-
-  <mat-form-field>
-    <input matInput placeholder="Mot De Passe" type = "password" [(ngModel)]="motDePasse" name="motDePasse" required>
-  </mat-form-field>
-
-    <button mat-stroked-button color="primary" [disabled]="((!this.login) || (!this.motDePasse))">
+<mat-card>
+  <mat-card-content>
+    <form ngForm #loginForm (submit)="onSubmit(); loginForm.reset()" class="form">
+      <h2>Login</h2>
+      <mat-form-field>
+        <input matInput placeholder="Pseudo" [(ngModel)]="login" name="login" required>
+        <mat-error>
+          Veuillez saisir le Pseudo
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Mot De Passe" [type]="hide ? 'password' : 'text'" [(ngModel)]="motDePasse" name="motDePasse" required>
+        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error>
+          Veuillez saisir le Mot de passe
+        </mat-error>
+      </mat-form-field>
+      <button mat-stroked-button color="primary" [disabled]="((!this.login) || (!this.motDePasse))">
       Connexion
     </button>
-</form>
+    </form>
+  </mat-card-content>
+</mat-card>

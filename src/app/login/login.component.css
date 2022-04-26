@@ -1,12 +1,19 @@
-.form {
-  display:flex;
-  flex-direction: column;
-  margin:5px;
-}
-
 .my-custom-snackbar {
   margin: 0 !important;
   position: absolute;
   right: 25px;
   top: 60px;
+}
+.loginBox {
+  max-width:  90%;
+  width: 500px
+}
+mat-card {
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
+}
+
+mat-form-field {
+  display: block;
 }

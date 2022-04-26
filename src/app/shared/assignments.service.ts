@@ -40,7 +40,7 @@ export class AssignmentsService {
       requestHeaders.append('Access-Control-Allow-Headers', allowHeaders);
       requestHeaders.append('Content-Type', contentType);
       requestHeaders.append('Accept', contentType);
-      requestHeaders.append('Authorization', this.authorizationToken);
+      requestHeaders.append('token', this.authorizationToken);
     }
     else {
       requestHeaders = new HttpHeaders({

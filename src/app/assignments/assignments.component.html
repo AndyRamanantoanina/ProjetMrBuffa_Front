@@ -18,10 +18,7 @@
     <button mat-flat-button color="primary" [disabled]="!hasPrevPage" (click)="premierePage()">Première page</button>
     &nbsp;
 
-    <button mat-flat-button color="primary"
-            (click)="pagePrecedente()"
-            [disabled]="!hasPrevPage"
-    >Page précédente</button>
+    <button mat-flat-button color="primary" (click)="pagePrecedente()"[disabled]="!hasPrevPage">Page précédente</button>
     &nbsp;
     <button mat-flat-button color="primary" (click)="pageSuivante()" [disabled]="!hasNextPage">Page suivante</button>
     &nbsp;
@@ -56,16 +53,14 @@
 
 <div>
   <main class="container">
-    <a routerLink="/add" class="ajouterBtn">
-      <button mat-flat-button color="accent">
-        Ajouter Assignment
-      </button>
-    </a>
   
-    <h2>Liste des devoirs de *Matiere* :</h2>
+    <h2>Liste des assignments:</h2>
     <div cdkDropListGroup>
       <div class="example-container">
         <h5>Non rendu</h5>
+        <button mat-flat-button color="primary" (click)="pagePrecedente()"[disabled]="!hasPrevPage"><mat-icon>navigate_before</mat-icon></button>
+        &nbsp;
+        <button mat-flat-button color="primary" (click)="pageSuivante()" [disabled]="!hasNextPage"><mat-icon>navigate_next</mat-icon></button>
     
         <div
           cdkDropList
@@ -89,28 +84,40 @@
     
       <div class="example-container">
         <h5>Rendu</h5>
+        <button mat-flat-button color="primary" (click)="pagePrecedente()"[disabled]="!hasPrevPage"><mat-icon>navigate_before</mat-icon></button>
+        &nbsp;
+        <button mat-flat-button color="primary" (click)="pageSuivante()" [disabled]="!hasNextPage"><mat-icon>navigate_next</mat-icon></button>
     
         <div
           cdkDropList
           [cdkDropListData]="rendu"
           class="example-list"
           (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of rendu" cdkDrag>
+          <div class="example-box2">
+            <mat-card class="example-card">
+              <mat-card-title-group >
+                <mat-card-title ><h5>Glisser ici pour rendre un assignment.</h5></mat-card-title>
+              </mat-card-title-group>
+              <mat-card-content>
+                
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div class="example-box" *ngFor="let item of rendu">
             <mat-card class="example-card">
               <mat-card-title-group>
-                <mat-card-title>Shiba Inu</mat-card-title>
-                <mat-card-subtitle>Small</mat-card-subtitle>
+                <mat-card-title>Nom devoir</mat-card-title>
+                <mat-card-subtitle>Nom eleve</mat-card-subtitle>
                 <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
               </mat-card-title-group>
               <mat-card-content>
-                Test222
+                date
               </mat-card-content>
             </mat-card>
           </div>
         </div>
       </div>
     </div>
-    <p>Déplacez pour rendre un devoir.</p>
   </main>
 </div>
 

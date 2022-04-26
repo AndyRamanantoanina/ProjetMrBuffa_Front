@@ -40,6 +40,7 @@ import { EditAssignmentComponent } from './assignments/edit-assignment/edit-assi
 import { AuthGuard } from './shared/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
+import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 
 const routes:Routes = [
   {
@@ -80,6 +81,7 @@ const routes:Routes = [
     EditAssignmentComponent,
     LoginComponent,
     HeaderComponent,
+    SidenavListComponent,
 
   ],
   imports: [

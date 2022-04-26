@@ -17,5 +17,7 @@ export class AddNoteDialogComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  openDialog() {
+    this.dialog.open(AddNoteDialogComponent);
+  }
 }

@@ -21,7 +21,6 @@ export class AssignmentsService {
 
 
   url = environment.myurl + "/assignments";
-  //url= "https://mbdsmadagascar2022api.herokuapp.com/api/assignments";
 
   protected getOptions(options: any = {}) : any {
     let requestHeaders: HttpHeaders;

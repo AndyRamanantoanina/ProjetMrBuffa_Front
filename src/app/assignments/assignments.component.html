@@ -1,123 +1,111 @@
-
-
-  <!--
-     <a routerLink="/add" class="ajouterBtn">
-    <button mat-flat-button color="accent">
-      Ajouter Assignment
-    </button>
-  </a>
-
-  <h2>Liste des devoirs :</h2>
-
-  <div class="barrePagination">
-    <p>Page courante : {{page}}, assignments visibles : {{pagingCounter}} - {{pagingCounter + limit-1}}, nbPages total {{totalPages}}</p>
-    <p>Nb assignments par page : <input type="range" min=5 max=100 [(ngModel)]="limit" (change)="getAssignments()">
-      {{limit}}
-    </p>
-
-    <button mat-flat-button color="primary" [disabled]="!hasPrevPage" (click)="premierePage()">Première page</button>
-    &nbsp;
-
-    <button mat-flat-button color="primary" (click)="pagePrecedente()"[disabled]="!hasPrevPage">Page précédente</button>
-    &nbsp;
-    <button mat-flat-button color="primary" (click)="pageSuivante()" [disabled]="!hasNextPage">Page suivante</button>
-    &nbsp;
-    <button mat-flat-button color="primary" (click)="dernierePage()" [disabled]="!hasNextPage">Dernière page</button>
-  </div>
-  <table mat-table [dataSource]="assignments" class="mat-elevation-z8">
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> Id </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="nom">
-      <th mat-header-cell *matHeaderCellDef> Nom </th>
-      <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="dateDeRendu">
-      <th mat-header-cell *matHeaderCellDef> Date de Rendu </th>
-      <td mat-cell *matCellDef="let element"> {{element.dateDeRendu}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="rendu">
-      <th mat-header-cell *matHeaderCellDef> Rendu </th>
-      <td mat-cell *matCellDef="let element"> {{element.rendu}} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
--->
-
-<div>
-  <main class="container">
-  
-    <h2>Liste des assignments:</h2>
-    <div cdkDropListGroup>
-      <div class="example-container">
-        <h5>Non rendu</h5>
-        <button mat-flat-button color="primary" (click)="pagePrecedente()"[disabled]="!hasPrevPage"><mat-icon>navigate_before</mat-icon></button>
-        &nbsp;
-        <button mat-flat-button color="primary" (click)="pageSuivante()" [disabled]="!hasNextPage"><mat-icon>navigate_next</mat-icon></button>
-    
-        <div
-          cdkDropList
-          [cdkDropListData]="nonrendu"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="example-box" *ngFor="let item of nonrendu" cdkDrag>
-            <mat-card class="example-card">
-              <mat-card-title-group>
-                <mat-card-title>Shiba Inu</mat-card-title>
-                <mat-card-subtitle>Small</mat-card-subtitle>
-                <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
-              </mat-card-title-group>
-              <mat-card-content>
-                Test
-              </mat-card-content>
-            </mat-card>
+<body>
+  <div class="task-manager" cdkDropListGroup>
+    <!-- left bar starts -->
+    <div class="left-bar">
+      
+      
+      <div class="left-bar">
+        <div class="upper-part">
+          <div class="actions">
+            Assignments Management
           </div>
         </div>
       </div>
-    
-      <div class="example-container">
-        <h5>Rendu</h5>
-        <button mat-flat-button color="primary" (click)="pagePrecedente()"[disabled]="!hasPrevPage"><mat-icon>navigate_before</mat-icon></button>
-        &nbsp;
-        <button mat-flat-button color="primary" (click)="pageSuivante()" [disabled]="!hasNextPage"><mat-icon>navigate_next</mat-icon></button>
-    
-        <div
-          cdkDropList
-          [cdkDropListData]="rendu"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="example-box2">
-            <mat-card class="example-card">
-              <mat-card-title-group >
-                <mat-card-title ><h5>Glisser ici pour rendre un assignment.</h5></mat-card-title>
-              </mat-card-title-group>
-              <mat-card-content>
-                
-              </mat-card-content>
-            </mat-card>
+
+      <!-- left content starts -->
+      <div class="left-content">
+
+        <ul class="category-list">
+          <li class="item" *ngIf="utilisateur.isAdmin" (click)="ajouterAssignment()">
+            <mat-icon>library_add</mat-icon>
+            <span> &nbsp; Ajouter Assignment</span>
+          </li>
+          <li class="item" (click)="disconnect()">
+            <mat-icon>logout</mat-icon>
+            <span> &nbsp; Se Deconnecter</span>
+          </li>
+        </ul>
+      </div>
+      <!-- left content ends -->
+    </div>
+    <!--  -->
+    <!-- left bar ends -->
+
+    <!-- page content starts -->
+
+    <div class="page-content">
+      
+      <div class="header">Non Rendus
+        <button class="header-pagination" (click)="dernierePage()" [disabled]="!(page < totalPages )"> <mat-icon>last_page</mat-icon></button>
+        <button class="header-pagination" (click)="pageSuivante()" [disabled]="!(page < totalPages )"> <mat-icon>navigate_next</mat-icon></button>
+        <button class="header-pagination"> {{page}} </button>
+        <button class="header-pagination" (click)="pagePrecedente()" [disabled]="(page == 1)"> <mat-icon>navigate_before</mat-icon></button>
+        <button class="header-pagination" (click)="premierePage()" [disabled]="(page == 1)"> <mat-icon>first_page</mat-icon></button>
+      </div> 
+      
+      <!-- tasks wrapper starts -->
+      <div class="tasks-wrapper" 
+      cdkDropList
+      [cdkDropListData]="assignmentsNonRendus"
+      (cdkDropListDropped)="drop($event)">
+        <div class="task" *ngFor="let assignment of assignmentsNonRendus" cdkDrag [cdkDragDisabled]="!canDrag()">
+          <a href="/assignment/{{assignment._id}}">
+            <label>
+              <img [src]="assignment.image">
+              <span > Devoir {{assignment.matiere}} : {{assignment.nom}} </span>
+            </label>
+          </a>
+          <span class="tag approved">{{assignment.auteur}}</span>
+        </div>
+      </div>
+      <!-- tasks wrapper ends -->
+    </div>
+    <!--  -->
+    <!-- page content ends -->
+
+    <!-- right bar starts -->
+    <div class="right-bar">
+      <div class="top-part">
+        <img class="feather feather-users" src="./../../assets/svg/users.svg" alt="" />
+        <div>{{utilisateur.nom}}</div>
+      </div>
+      <div class="header">Rendus
+        <button class="header-pagination" (click)="dernierePageRendus()"[disabled]="!(pageRendus < totalPagesRendus )"> <mat-icon>last_page</mat-icon></button>
+        <button class="header-pagination" (click)="pageSuivanteRendus()"[disabled]="!(pageRendus < totalPagesRendus )"> <mat-icon>navigate_next</mat-icon></button>
+        <button class="header-pagination"> {{pageRendus}} </button>
+        <button class="header-pagination" (click)="pagePrecedenteRendus()"[disabled]="(pageRendus == 1)"> <mat-icon>navigate_before</mat-icon></button>
+        <button class="header-pagination" (click)="premierePageRendus()"[disabled]="(pageRendus == 1)"> <mat-icon>first_page</mat-icon></button>
+      </div>
+
+
+      <div class="right-content" cdkDropList
+        [cdkDropListData]="assignmentsRendus"
+        (cdkDropListDropped)="drop($event)"
+        >
+        <div class="task-box glisser" *ngIf="utilisateur.isAdmin">
+          <div class="description-task" >
+            <div class="task-name">Glisser ici pour rendre l'assignment</div>
           </div>
-          <div class="example-box" *ngFor="let item of rendu">
-            <mat-card class="example-card">
-              <mat-card-title-group>
-                <mat-card-title>Nom devoir</mat-card-title>
-                <mat-card-subtitle>Nom eleve</mat-card-subtitle>
-                <img mat-card-sm-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" >
-              </mat-card-title-group>
-              <mat-card-content>
-                date
-              </mat-card-content>
-            </mat-card>
-          </div>
+        </div>
+        <div class="task-box blue" *ngFor="let assignment of assignmentsRendus" >
+          <a href="/assignment/{{assignment._id}}">
+            <div class="description-task">
+              <div class="matieres">
+                <img [src]="assignment.image"/>
+                <div class="task-name">{{assignment.matiere}}  : {{assignment.nom}}  </div>
+              </div>
+              <div class="time">Rendu par {{assignment.auteur}}  le {{assignment.dateDeRendu | date:'fullDate'}} </div>
+            </div>
+
+          </a>
         </div>
       </div>
     </div>
-  </main>
-</div>
 
+
+    <section>
+      
+    </section>
+    <!-- right bar ends -->
+  </div>
+</body>

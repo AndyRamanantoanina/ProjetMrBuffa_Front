@@ -31,20 +31,9 @@ export class LoginComponent implements OnInit {
   }
 
   seConnecter() {
-    const loginForm = {
-      'pseudo': this.login,
-      'mdp': this.motDePasse
-    }
-    console.log(loginForm);
-
-    this.auth.login(loginForm).subscribe({
+    this.auth.login({ "pseudo" : this.login, "mdp" : this.motDePasse }).subscribe({
       next: response => {
-        // @ts-ignore
-        this.auth.setToken(response.token);
-        // @ts-ignore
-        this.auth.setUtilisateurAdmin(response.user.isAdmin);
-        console.log(localStorage.getItem("isAdmin"));
-        console.log(response);
+        this.auth.setInformation(response);
         this.router.navigate(['./home']);
       },
       error: () => {
@@ -52,7 +41,7 @@ export class LoginComponent implements OnInit {
         this.snackbar.open(message, '',  {
           duration : 2000,
           verticalPosition: 'top',
-          panelClass: ['mat-toolbar', 'mat-primary']
+          panelClass: ['mat-toolbar', 'mat-warn']
         })
       }
     }) 

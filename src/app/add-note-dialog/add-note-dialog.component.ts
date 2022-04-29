@@ -1,10 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-
-export interface DialogData {
-  animal: string;
-  name: string;
-}
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { DialogData } from '../assignments/assignments.component';
 
 @Component({
   selector: 'app-add-note-dialog',
@@ -13,11 +9,35 @@ export interface DialogData {
 })
 export class AddNoteDialogComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  thereIsError = false;
+  error = "";
+  note !: number;
+  remarque !: string;
+  isDisabled = true;
+
+  constructor(public dialogRef: MatDialogRef<AddNoteDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
   ngOnInit(): void {
   }
-  openDialog() {
-    this.dialog.open(AddNoteDialogComponent);
+  
+  onNoClick(): void {
+    this.dialogRef.close();
   }
+
+  rendre(){
+    // console.log(this.note)
+    this.verifierNote();
+    if(!this.thereIsError){
+      this.dialogRef.close({ note: this.note, remarque : this.remarque })
+    }
+  }
+
+  verifierNote(){
+    if(this.note < 0 || this.note > 20){
+      this.thereIsError = true;
+      this.error = "Note saisie invalide";
+    }
+  }
+
 }

@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AssignmentsService } from 'src/app/shared/assignments.service';
 import { Assignment } from '../assignment.model';
+import { Matiere } from '../matiere.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { DialogData } from '../assignments.component';
 
 @Component({
   selector: 'app-add-assignment',
@@ -12,43 +15,64 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 export class AddAssignmentComponent implements OnInit {
   // Champ de formulaire
   nomAssignment!: string;
+  matiere: Matiere = new Matiere();
+  auteur!: string;
   dateDeRendu!: Date;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
+  fourthFormGroup!: FormGroup;
   isEditable = false;
+  matieres: Matiere[] = [];
 
 
-  constructor(private assignmentsService:AssignmentsService, private router:Router,private _formBuilder: FormBuilder) {}
+  constructor(private assignmentsService:AssignmentsService, private router:Router,private _formBuilder: FormBuilder,public dialogRef: MatDialogRef<AddAssignmentComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   ngOnInit(): void {
+    this.getMatieres();
+
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required],
     });
+    this.thirdFormGroup = this._formBuilder.group({
+      thirdCtrl: ['', Validators.required],
+    });
+    this.fourthFormGroup = this._formBuilder.group({
+      fourthCtrl: ['', Validators.required],
+    });
+
   }
 
   onSubmit() {
-    if((!this.nomAssignment) || (!this.dateDeRendu)) return;
-    console.log(
-      'nom = ' + this.nomAssignment + ' date de rendu = ' + this.dateDeRendu
-    );
-
+    if((!this.nomAssignment) || (!this.auteur) || (!this.matiere.nom) || (!this.dateDeRendu)) return;
     let newAssignment = new Assignment();
-    newAssignment.id = Math.round(Math.random()*10000000);
     newAssignment.nom = this.nomAssignment;
+    newAssignment.auteur = this.auteur;
+    newAssignment.matiere = this.matiere.nom;
+    newAssignment.image = this.matiere.image;
     newAssignment.dateDeRendu = this.dateDeRendu;
     newAssignment.rendu = false;
 
     this.assignmentsService.addAssignment(newAssignment)
     .subscribe(reponse => {
-      console.log(reponse.message);
-
-      // il va falloir naviguer (demander au router) d'afficher à nouveau la liste
-      // en gros, demander de naviguer vers /home
-      this.router.navigate(["/home"]);
+      this.fermer();
     })
+  }
+
+  getMatieres(){
+    const body =  {
+      prof  : "admin111"
+    }
+    this.assignmentsService.getMatieres(body).subscribe(matieres => {
+      this.matieres = matieres.matieres;
+    })
+  }
+  
+  fermer(): void {
+    this.dialogRef.close();
   }
   
 }

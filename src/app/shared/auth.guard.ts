@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
         return false;
       }
 
-      console.log(!this.authService.isAdmin())
+      /* console.log(!this.authService.isAdmin())
       if(!this.authService.isAdmin()){
         this.router.navigate(['']);
         var message = "GARDIEN n'autorise pas la navigation, vous n'êtes pas admin";
@@ -32,8 +32,9 @@ export class AuthGuard implements CanActivate {
           panelClass: ['mat-toolbar', 'mat-primary']
         });
         return false;
-      }
-      return this.authService.isLoggedIn();
+      }*/
+
+      return true;
   }
 
 }

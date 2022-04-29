@@ -1,26 +1,11 @@
-<mat-card>
-  <mat-card-content>
-    <form ngForm #loginForm (submit)="onSubmit(); loginForm.reset()" class="form">
-      <h2>Login</h2>
-      <mat-form-field>
-        <input matInput placeholder="Pseudo" [(ngModel)]="login" name="login" required>
-        <mat-icon matSuffix>perm_identity</mat-icon>
-        <mat-error>
-          Veuillez saisir le Pseudo
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'" [(ngModel)]="motDePasse" name="motDePasse" required>
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-        <mat-error>
-          Veuillez saisir le Mot de passe
-        </mat-error>
-      </mat-form-field>
-      <button mat-stroked-button color="primary" [disabled]="((!this.login) || (!this.motDePasse))">
-      Connexion
-    </button>
+
+<div class="main">
+  <div class="container" id="a-container">
+    <form class="form" ngForm #loginForm (submit)="onSubmit(); loginForm.reset()">
+      <h2 class="title">Login</h2>
+      <input [(ngModel)]="login" name ="login" class="form__input" type="text" placeholder="Pseudo" required/>
+      <input [(ngModel)]="motDePasse" name="motDePasse" class="form__input" type="password" placeholder="Mot de passe" required/>
+      <button class="button submit">Connexion</button>
     </form>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>

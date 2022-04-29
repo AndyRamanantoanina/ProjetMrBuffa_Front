@@ -5,6 +5,7 @@ import { Assignment } from '../assignments/assignment.model';
 import { LoggingService } from './logging.service';
 import { bdInitialAssignments } from './data';
 import { AuthService } from './auth.service';
+import { environment } from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -12,44 +13,24 @@ import { AuthService } from './auth.service';
 
 export class AssignmentsService {
   assignments:Assignment[] = [];
-  private authorizationToken: string = '-'
 
   constructor(private loggingService:LoggingService, private http:HttpClient, private auth:AuthService) {
     this.loggingService.setNiveauTrace(2);
-    this.setAuthorizationTokenValue();
 
   }
 
 
-  url = "http://localhost:8010/api/assignments";
+  url = environment.myurl + "/assignments";
   //url= "https://mbdsmadagascar2022api.herokuapp.com/api/assignments";
 
-  protected setAuthorizationTokenValue() : void {
-    this.authorizationToken = 'Bearer ' + this.auth.getToken();
-  }
-
   protected getOptions(options: any = {}) : any {
-    this.setAuthorizationTokenValue();
-
     let requestHeaders: HttpHeaders;
-    
-    var allowHeaders = '*';
-    var contentType = 'application/json';
-    if(options.headers && (options.headers instanceof HttpHeaders)) {
-      requestHeaders = (options.headers as HttpHeaders);
-      requestHeaders.append('Access-Control-Allow-Headers', allowHeaders);
-      requestHeaders.append('Content-Type', contentType);
-      requestHeaders.append('Accept', contentType);
-      requestHeaders.append('token', this.authorizationToken);
-    }
-    else {
-      requestHeaders = new HttpHeaders({
-        'Access-Control-Allow-Headers': allowHeaders,
-        'Content-Type': contentType,
-        'Accept': contentType,
-        'Authorization' : this.authorizationToken
-      })
-    }
+    requestHeaders = new HttpHeaders({
+        'Access-Control-Allow-Headers': '*',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'token' : this.auth.getToken()
+      });
     if(!options.observe) {
       options.observe = 'body'
     }
@@ -57,31 +38,29 @@ export class AssignmentsService {
     return options;
   }
 
-  getAssignments(page:number, limit:number):Observable<any> {
+  getAssignments(page:number, limit:number, rendu: boolean):Observable<any> {
     // en réalité, bientôt au lieu de renvoyer un tableau codé en dur,
     // on va envoyer une requête à un Web Service sur le cloud, qui mettra un
     // certain temps à répondre. On va donc préparer le terrain en renvoyant
     // non pas directement les données, mais en renvoyant un objet "Observable"
     //return of(this.assignments);
-    return this.http.get<Assignment[]>(this.url + "?page=" + page + "&limit=" + limit,this.getOptions({}));
+    //return this.http.get<Assignment[]>(this.url + "?page=" + page + "&limit=" + limit);
+
+    const url = environment.myurl+"/getAssignments";
+    return this.http.post<Assignment[]>(url, { "page" : page, "limit" : limit, "rendu" : rendu}, this.getOptions({}))
   }
   
 
-  getAssignment(id:number):Observable<Assignment|undefined> {
-    //let a = this.assignments.find(a => a.id === id);
-    //return of(a);
-    return this.http.get<Assignment>(`${this.url}/${id}`)
-    .pipe(
-      map(a => {
-        a.nom = a.nom + " MODIFIE PAR UN MAP AVANT DE L'ENVOYER AU COMPOSANT D'AFFICHAGE";
-        return a;
-      }),
-      tap(a => {
-        console.log("Dans le tap, pour debug, assignment recu = " + a.nom)
-      }),
-      catchError(this.handleError<any>('### catchError: getAssignments by id avec id=' + id))
-    );
+  getAssignment(id:string):Observable<any> {
+    
+    return this.http.get<Assignment>(`${this.url}/${id}` , this.getOptions({}));
   }
+
+  getMatieres(body: any):Observable<any> {
+    const url = environment.myurl+"/matieres";
+    return this.http.post<Assignment>(url, body,this.getOptions({}));
+  }
+
 
   private handleError<T>(operation: any, result?: T) {
     return (error: any): Observable<T> => {
@@ -102,10 +81,8 @@ export class AssignmentsService {
     //return of("Assignment ajouté");
   }
 
-  updateAssignment(assignment:Assignment):Observable<any> {
-    this.loggingService.log(assignment.nom, "modifié");
-
-    return this.http.put<Assignment>(this.url, assignment,this.getOptions({}));
+  updateAssignment(body: any):Observable<any> {
+    return this.http.put<Assignment>(this.url, body,this.getOptions({}));
   }
 
   deleteAssignment(assignment:Assignment):Observable<any> {

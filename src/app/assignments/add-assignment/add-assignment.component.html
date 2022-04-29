@@ -1,57 +1,69 @@
-<form ngForm #assignmentForm (submit)="onSubmit(); assignmentForm.reset()" class="form">
-  <mat-form-field>
-    <input matInput placeholder="Nom de l'assignment" [(ngModel)]="nomAssignment" name="nom" required>
-  </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Choose a date</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="dateDeRendu" name="date" required>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+<div class="main">
+  <div class="container" id="a-container">
 
-    <button mat-stroked-button color="primary" [disabled]="((!this.nomAssignment) || (!this.dateDeRendu))">
-      Ajouter un devoir
-    </button>
+    <form ngForm class="form">
+      <h2 class="title">Ajouter nouvel assignment</h2>
+      <mat-stepper linear #stepper>
+        <mat-step [stepControl]="firstFormGroup">
+          <form class="form" [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Matière</ng-template>
+            
+              <select [(ngModel)]="matiere" name="matiere" class="form__input" formControlName="firstCtrl" required>
+                <option disabled selected>Choisissez la matière</option>
+                <option *ngFor="let mat of matieres" class="form__span" [ngValue]="mat">{{mat.nom}}</option>
+              </select>
 
-    <button mat-raised-button (click)="isEditable = !isEditable">
-      {{!isEditable ? 'Enable edit mode' : 'Disable edit mode'}}
-    </button>
-    
-    <mat-stepper linear #stepper>
-      <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
-        <form [formGroup]="firstFormGroup">
-          <ng-template matStepLabel>Fill out your name</ng-template>
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput formControlName="firstCtrl" placeholder="Last name, First name" required>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperNext>Next</button>
+            <div>
+              <button mat-button matStepperNext>Suivant</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" >
+          <form class="form" [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Intitulé du devoir</ng-template>
+              <input class="form__input" [(ngModel)]="nomAssignment" name="nomAssignment" matInput formControlName="secondCtrl" placeholder="Nom du devoir" required>
+            <div>
+              <button mat-button matStepperPrevious>Retour</button>
+              <button mat-button matStepperNext>Suivant</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="thirdFormGroup" >
+          <form class="form" [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>Elève</ng-template>
+              <input class="form__input" [(ngModel)]="auteur" name="auteur"  matInput formControlName="thirdCtrl" placeholder="Nom de l'élève" required>
+            <div>
+              <button mat-button matStepperPrevious>Retour</button>
+              <button mat-button matStepperNext>Suivant</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="fourthFormGroup" >
+          <form class="form" [formGroup]="fourthFormGroup">
+            <ng-template matStepLabel>Date De Rendu</ng-template>
+              <input class="form__input" [(ngModel)]="dateDeRendu" name="dateDeRendu"  matInput formControlName="fourthCtrl" type="date" required>
+            <div>
+              <button mat-button matStepperPrevious>Retour</button>
+              <button mat-button matStepperNext>Suivant</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Confirmation</ng-template>
+          <div class="form">
+            <span class="form__span">Date de Rendu : {{dateDeRendu | date: 'dd-MM-yyy'}}. Devoir {{matiere.nom}} : {{nomAssignment}} pour {{auteur}}</span>
+            <span class="form__span">Voulez-vous enregistrer ? </span>
+            <div class="forms__icons">
+              <button mat-button matStepperPrevious>Retour</button>
+              <button mat-button (click)="onSubmit()">Ajouter</button>
+            </div>
           </div>
-        </form>
-      </mat-step>
-      <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
-        <form [formGroup]="secondFormGroup">
-          <ng-template matStepLabel>Fill out your address</ng-template>
-          <mat-form-field appearance="fill">
-            <mat-label>Address</mat-label>
-            <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY"
-                   required>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
-          </div>
-        </form>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
-        <p>You are now done.</p>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="stepper.reset()">Reset</button>
-        </div>
-      </mat-step>
-    </mat-stepper>
-</form>
+        </mat-step>
+      </mat-stepper>
+
+      <a (click)="fermer()" nclass="form__link">Annuler</a>
+  </form>
+  </div>
+
+</div>

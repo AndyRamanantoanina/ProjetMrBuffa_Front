@@ -1,154 +1,177 @@
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { AfterViewInit, Component, NgZone, OnInit, ViewChild, Inject} from '@angular/core';
-import { filter, map, pairwise, tap, throttleTime } from 'rxjs';
+import { Component, NgZone, OnInit, Inject} from '@angular/core';
 import { AssignmentsService } from '../shared/assignments.service';
 import { Assignment } from './assignment.model';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {MatDialog,MatDialogRef} from '@angular/material/dialog';
+import { AuthService } from 'src/app/shared/auth.service';
+import { Router } from '@angular/router';
+import { AddNoteDialogComponent } from '../add-note-dialog/add-note-dialog.component';
+import { AddAssignmentComponent } from './add-assignment/add-assignment.component';
+
+
+export interface DialogData {
+  assignment: Assignment;
+}
 
 @Component({
   selector: 'app-assignments',
   templateUrl: './assignments.component.html',
   styleUrls: ['./assignments.component.css'],
 })
-export class AssignmentsComponent implements OnInit, AfterViewInit {
+export class AssignmentsComponent implements OnInit {
   assignments:Assignment[] = [];
   displayedColumns: string[] = ['id', 'nom', 'dateDeRendu', 'rendu'];
 
-  // pagination
+
+  // pagination assignment non rendus
   page=1;
   limit=10;
   totalPages=0;
-  pagingCounter=0;
-  hasPrevPage=false;
-  hasNextPage=true;
   prevPage= 1;
   nextPage= 2;
 
-  constructor(private assignmentsService:AssignmentsService, private ngZone: NgZone, public dialog: MatDialog) {}
+  // pagination assignment rendus
+  pageRendus=1;
+  totalPagesRendus=0;
+  prevPageRendus= 1;
+  nextPageRendus= 2;
 
-  @ViewChild('scroller') scroller!: CdkVirtualScrollViewport;
-  
+  assignmentsRendus:Assignment[] = [];
+  assignmentsNonRendus:Assignment[] = [];
+  utilisateur: any;
 
-  ngAfterViewInit():void{
-    this.scroller.elementScrolled().pipe(
-      tap(event => {
-        //console.log(event);
-      }),
-      map(event => {
-        return this.scroller.measureScrollOffset('bottom');
-      }),
-      tap(val => {
-        //console.log("distance par rapport à la fin = " + val)
-      }),
-      pairwise(),
-      tap(val => {
-        /*
-        if(val[0] < val[1]) console.log("on monte")
-        else console.log("on descend")
-        */
-      }),
-      filter(([y1, y2]) => (y2 < y1 && y2 < 140)),
-      tap(val => {
-        //console.log(val)
-      }),
-      throttleTime(200),
-      tap(val => {
-        //console.log(val);
-      })
-    ).subscribe(() => {
-      // ici traitement final
-      console.log("On va chercher de nouveaux assignments !")
-
-      // on le fait en tache de fond...
-      this.ngZone.run(() => {
-        this.page = this.nextPage;
-        this.getAssignmentsScrollInfini();
-      })
-    })
-  }
+  constructor(private assignmentsService:AssignmentsService, private ngZone: NgZone, public dialog: MatDialog, private authService: AuthService, private router: Router) {}
 
   // appelé après le constructeur et AVANT l'affichage du composant
   ngOnInit(): void {
-    console.log("Dans ngOnInit, appelé avant l'affichage");
+    // console.log("Dans ngOnInit, appelé avant l'affichage");
     this.getAssignments();
+    this.utilisateur = JSON.parse(localStorage.getItem('user') || '{}');
+    // console.log(this.utilisateur)
   }
 
+
+  // Récupérer les assignments
   getAssignments() {
       // demander les données au service de gestion des assignments...
-      this.assignmentsService.getAssignments(this.page, this.limit)
-      .subscribe(reponse => {
-        console.log("données arrivées");
-        this.assignments = reponse.docs;
-        this.page = reponse.page;
-        this.limit=reponse.limit;
-        this.totalPages=reponse.totalPages;
-        this.pagingCounter=reponse.pagingCounter;
-        this.hasPrevPage=reponse.hasPrevPage;
-        this.hasNextPage=reponse.hasNextPage;
-        this.prevPage= reponse.prevPage;
-        this.nextPage= reponse.nextPage;
-      });
+      this.getAssignmentsRendus(); 
+      this.getAssignmentsNonRendus()
 
-      console.log("Après l'appel au service");
+      // console.log("Assignment Rendus et non rendus reçus ... ");
   }
 
-  getAssignmentsScrollInfini() {
-    // demander les données au service de gestion des assignments...
-    this.assignmentsService.getAssignments(this.page, this.limit)
-    .subscribe(reponse => {
-      console.log("données arrivées");
-      //this.assignments = reponse.docs;
-      // au lieu de remplacer les assignments chargés par les nouveaux, on les ajoute
-      this.assignments = this.assignments.concat(reponse.docs);
-
-      this.page = reponse.page;
-      this.limit=reponse.limit;
-      this.totalPages=reponse.totalPages;
-      this.pagingCounter=reponse.pagingCounter;
-      this.hasPrevPage=reponse.hasPrevPage;
-      this.hasNextPage=reponse.hasNextPage;
-      this.prevPage= reponse.prevPage;
-      this.nextPage= reponse.nextPage;
+  getAssignmentsRendus(){
+    
+    this.assignmentsService.getAssignments(this.pageRendus, this.limit, true)
+    .subscribe(response => {
+      this.assignmentsRendus = response.assignments.docs;
+      this.totalPagesRendus = response.assignments.totalPages;
+      this.prevPageRendus = response.assignments.prevPage;
+      this.nextPageRendus = response.assignments.nextPage;
     });
+  }
 
-    console.log("Après l'appel au service");
-}
+  getAssignmentsNonRendus(){
+      
+    this.assignmentsService.getAssignments(this.page, this.limit, false)
+    .subscribe(response => {
+      this.assignmentsNonRendus = response.assignments.docs;
+      this.totalPages = response.assignments.totalPages;
+      this.prevPage = response.assignments.prevPage;
+      this.nextPage = response.assignments.nextPage;
+    });
+  }
 
+
+  // Pagination fonctions
   pagePrecedente() {
     this.page--;
-    this.getAssignments();
+    this.getAssignmentsNonRendus();
   }
 
   pageSuivante() {
     this.page++;
-    this.getAssignments();
+    this.getAssignmentsNonRendus();
   }
 
   premierePage() {
     this.page = 1;
-    this.getAssignments();
+    this.getAssignmentsNonRendus();
   }
 
   dernierePage() {
     this.page = this.totalPages;
-    this.getAssignments();
+    this.getAssignmentsNonRendus();
   }
 
-  rendu = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
+  pagePrecedenteRendus() {
+    this.pageRendus--;
+    this.getAssignmentsRendus();
+  }
 
-  nonrendu = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
+  pageSuivanteRendus() {
+    this.pageRendus++;
+    this.getAssignmentsRendus();
+  }
 
-  drop(event: CdkDragDrop<string[]>) {
+  premierePageRendus() {
+    this.pageRendus = 1;
+    this.getAssignmentsRendus();
+  }
+
+  dernierePageRendus() {
+    this.pageRendus = this.totalPagesRendus;
+    this.getAssignmentsRendus();
+  }
+
+  // Noter ( drag and drop )
+  drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
-    }
+
+    const dialogRef = this.dialog.open(AddNoteDialogComponent, {
+      width: "50%",
+      data: {
+        assignment : event.previousContainer.data[event.previousIndex]
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      const addNoteForm = {
+        _id : event.previousContainer.data[event.previousIndex]._id,
+        note : result.note,
+        remarque : result.remarque
+      }
+
+      this.assignmentsService.updateAssignment(addNoteForm).subscribe(response => {
+        transferArrayItem(
+          event.previousContainer.data,
+          event.container.data,
+          event.previousIndex,
+          event.currentIndex,
+          );
+      });
+      
+    })
+  }
+
+  }
+
+  // Ajouter Assignment ( appel dialog )
+  ajouterAssignment(){
+    const dialogRef = this.dialog.open(AddAssignmentComponent, {
+      width: "100%"
+    });
+  }
+
+  public disconnect = () => {
+    this.authService.destroyToken();
+    this.router.navigate(['/']);
+  }
+
+  canDrag(){
+    if(this.utilisateur.isAdmin) return true;
+    else return false;
   }
 }

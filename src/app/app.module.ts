@@ -30,17 +30,14 @@ import { NonRenduDirective } from './shared/non-rendu.directive';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { AssignmentDetailComponent } from './assignments/assignment-detail/assignment-detail.component';
 import { AddAssignmentComponent } from './assignments/add-assignment/add-assignment.component';
-import { HeaderComponent } from './navigation/header/header.component';
 
 import { Routes, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 
-import { EditAssignmentComponent } from './assignments/edit-assignment/edit-assignment.component';
 import { AuthGuard } from './shared/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { AddNoteDialogComponent } from './add-note-dialog/add-note-dialog.component';
-import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 
 const routes:Routes = [
   {
@@ -49,23 +46,15 @@ const routes:Routes = [
   },
   {
     path: '',
-    //canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children : [
       {
         path:"home",
         component: AssignmentsComponent
       },
       {
-        path:"add",
-        component: AddAssignmentComponent
-      },
-      {
         path:"assignment/:id",
         component: AssignmentDetailComponent
-      },
-      {
-        path:"assignment/:id/edit",
-        component: EditAssignmentComponent,
       }
     ]
   }
@@ -78,11 +67,8 @@ const routes:Routes = [
     NonRenduDirective,
     AssignmentDetailComponent,
     AddAssignmentComponent,
-    EditAssignmentComponent,
     LoginComponent,
-    HeaderComponent,
-    SidenavListComponent,
-
+    AddNoteDialogComponent
   ],
   imports: [
     BrowserModule, FormsModule, ReactiveFormsModule,CommonModule, MatDialogModule,

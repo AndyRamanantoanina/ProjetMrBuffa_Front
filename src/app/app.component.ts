@@ -22,9 +22,9 @@ export class AppComponent {
   genererDonneesDeTest() {
     //this.assignmentsService.peuplerBD();
     this.assignmentsService.peuplerBDAvecForkJoin().subscribe(() => {
-      console.log(
+      /* console.log(
         'TOUS LES AJOUTS ONT ETE FAITS, ON PEUT RE-AFFICHER LA LISTE'
-      );
+      ); */
       // replaceUrl = true = force le refresh, même si
       // on est déjà sur la page d’accueil
       // Marche plus avec la dernière version d’angular

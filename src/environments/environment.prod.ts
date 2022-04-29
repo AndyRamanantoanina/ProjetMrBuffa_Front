@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  myurl: "https://back-projet-buffa.herokuapp.com/api"
 };

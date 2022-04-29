@@ -1,28 +1,32 @@
-# AssignmentApp
+# AssignmentManagement
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.5.
+Ce projet a été généré avec [Angular CLI](https://github.com/angular/angular-cli) version 13.2.5.
 
-## Development server
+Cette partie est la partie Front End du projet MBDS Madagascar 2021 - 2022.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Voici le lien du projet déployé : 
 
-## Code scaffolding
+Design inspiré de https://www.youtube.com/watch?v=mvXX32keamM&t=4s
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Pré-requis
 
-## Build
+- Angular CLI version version 13.2.5
+- IDE : Visual Studio Code ( par exemple )
+- Node version - '16.14.0'
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Installation
 
-## Running unit tests
+Pour tester le projet localement : 
+- Clonez et lancez le [backend](https://github.com/AndyRamanantoanina/ProjetMrBuffet_Back.git) par la commande ``npm install`` puis ``npm start`` 
+- Clonez le [projet](https://github.com/AndyRamanantoanina/ProjetMrBuffa_Front.git)
+- Installez les packages par ``npm install``
+- Démarrez le projet par ``ng serve``
+- Naviguez sur ``http://localhost:4200/``
+- Pour se connecter: 
+    - en tant que Prof -> pseudo: Karrah; mdp: 1234
+    - en tant qu'élève -> pseudo: Carroll; mdp: 1234
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Contributeurs
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# MBDS_Madagscar2021-2022Front
+- RAMANANTOANINA Andy Tahina Numero 17 
+- RANDRIANEKENA Fitiavana Niavo Numero 20
